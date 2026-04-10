@@ -22,4 +22,7 @@ export type {
   SessionIdSegmentConfig,
   EnvSegmentConfig,
   WeeklySegmentConfig,
+  RushHoursSegmentConfig,
 } from "./renderer";
+export { getRushHoursInfo } from "./rushHours";
+export type { RushHoursInfo } from "./rushHours";

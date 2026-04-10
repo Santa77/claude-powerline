@@ -33,6 +33,7 @@ export interface ColorTheme {
   version: SegmentColor;
   env: SegmentColor;
   weekly: SegmentColor;
+  rushHours: SegmentColor;
 }
 
 export interface PowerlineColors {
@@ -65,6 +66,8 @@ export interface PowerlineColors {
   envFg: string;
   weeklyBg: string;
   weeklyFg: string;
+  rushHoursBg: string;
+  rushHoursFg: string;
   partFg: Record<string, string>;
 }
 

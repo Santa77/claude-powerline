@@ -54,6 +54,10 @@ export const DEFAULT_CONFIG: PowerlineConfig = {
             showLinesAdded: true,
             showLinesRemoved: true,
           },
+          rushHours: {
+            enabled: false,
+            showCountdown: true,
+          },
         },
       },
     ],

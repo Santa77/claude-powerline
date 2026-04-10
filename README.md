@@ -329,6 +329,36 @@ Only visible when Claude Code provides native `rate_limits.seven_day` data (Clau
 </details>
 
 <details>
+<summary><strong>Rush Hours</strong> - Shows whether you are in Anthropic peak hours with countdown timer</summary>
+
+```json
+"rushHours": {
+  "enabled": true,
+  "showCountdown": true
+}
+```
+
+**Options:**
+
+- `showCountdown`: Show time remaining until end of rush (if in rush) or time until next rush starts (if off-peak)
+
+Peak hours are **Monday–Friday, 13:00–19:00 UTC** (05:00–11:00 PT). During this window Anthropic's 5-hour session limit burns faster than real-time.
+
+**Display examples:**
+
+| State | Example output |
+|-------|---------------|
+| In rush | `⚡ Rush -1h 23m` |
+| Off-peak (weekday) | `⚡ Off-peak +4h 10m` |
+| Weekend | `⚡ Weekend` |
+
+Colors: red/critical background during rush hours, green background when off-peak or weekend.
+
+**Symbols:** `⚡` Rush hours (unicode) &#8226; `!` Rush hours (text)
+
+</details>
+
+<details>
 <summary><strong>Metrics</strong> - Shows performance analytics from your Claude sessions</summary>
 
 ```json
@@ -722,7 +752,7 @@ Use bare segment names to render the full pre-formatted segment:
 ```
 context  block  session  today   weekly
 git      dir    version  tmux    metrics
-activity env
+activity env    rushHours
 ```
 
 #### Dot-Notation Subsegments

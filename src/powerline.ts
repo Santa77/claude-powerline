@@ -18,6 +18,7 @@ import type {
   SessionIdSegmentConfig,
   EnvSegmentConfig,
   WeeklySegmentConfig,
+  RushHoursSegmentConfig,
 } from "./segments";
 import type { BlockInfo } from "./segments/block";
 import type { TodayInfo } from "./segments/today";
@@ -42,6 +43,7 @@ import {
 } from "./segments";
 import { BlockProvider } from "./segments/block";
 import { TodayProvider } from "./segments/today";
+import { getRushHoursInfo } from "./segments/rushHours";
 import {
   SYMBOLS,
   TEXT_SYMBOLS,
@@ -563,6 +565,15 @@ export class PowerlineRenderer {
       );
     }
 
+    if (segment.type === "rushHours") {
+      const rushHoursInfo = getRushHoursInfo();
+      return this.segmentRenderer.renderRushHours(
+        rushHoursInfo,
+        colors,
+        segment.config as RushHoursSegmentConfig,
+      );
+    }
+
     return null;
   }
 
@@ -698,6 +709,7 @@ export class PowerlineRenderer {
       env: symbolSet.env,
       session_id: symbolSet.session_id,
       weekly_cost: symbolSet.weekly_cost,
+      rush_hours: symbolSet.rush_hours,
     };
   }
 
@@ -771,6 +783,7 @@ export class PowerlineRenderer {
     const version = getSegmentColors("version");
     const env = getSegmentColors("env");
     const weekly = getSegmentColors("weekly");
+    const rushHours = getSegmentColors("rushHours");
 
     return {
       reset: colorSupport === "none" ? "" : RESET_CODE,
@@ -802,6 +815,8 @@ export class PowerlineRenderer {
       envFg: env.fg,
       weeklyBg: weekly.bg,
       weeklyFg: weekly.fg,
+      rushHoursBg: rushHours.bg,
+      rushHoursFg: rushHours.fg,
       partFg: theme === "custom" ? this.resolvePartColors(convertHex) : {},
     };
   }
@@ -853,6 +868,8 @@ export class PowerlineRenderer {
         return colors.envBg;
       case "weekly":
         return colors.weeklyBg;
+      case "rushHours":
+        return colors.rushHoursBg;
       default:
         return colors.modeBg;
     }

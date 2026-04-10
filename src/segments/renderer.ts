@@ -10,6 +10,7 @@ import type {
   MetricsInfo,
 } from ".";
 import type { TodayInfo } from "./today";
+import type { RushHoursInfo } from "./rushHours";
 
 import path from "node:path";
 import {
@@ -108,6 +109,10 @@ export interface WeeklySegmentConfig extends SegmentConfig {
   displayStyle?: BarDisplayStyle;
 }
 
+export interface RushHoursSegmentConfig extends SegmentConfig {
+  showCountdown?: boolean;
+}
+
 export type AnySegmentConfig =
   | SegmentConfig
   | DirectorySegmentConfig
@@ -121,7 +126,8 @@ export type AnySegmentConfig =
   | VersionSegmentConfig
   | SessionIdSegmentConfig
   | EnvSegmentConfig
-  | WeeklySegmentConfig;
+  | WeeklySegmentConfig
+  | RushHoursSegmentConfig;
 
 export interface PowerlineSymbols {
   right: string;
@@ -156,6 +162,7 @@ export interface PowerlineSymbols {
   env: string;
   session_id: string;
   weekly_cost: string;
+  rush_hours: string;
 }
 
 export interface SegmentData {
@@ -793,5 +800,51 @@ export class SegmentRenderer {
       ? `${this.symbols.env} ${prefix}: ${value}`
       : `${this.symbols.env} ${value}`;
     return { text, bgColor: colors.envBg, fgColor: colors.envFg };
+  }
+
+  renderRushHours(
+    rushHoursInfo: RushHoursInfo,
+    colors: PowerlineColors,
+    config?: RushHoursSegmentConfig,
+  ): SegmentData {
+    const showCountdown = config?.showCountdown !== false;
+
+    if (rushHoursInfo.isRush) {
+      const parts = [`${this.symbols.rush_hours} Rush`];
+      if (showCountdown) {
+        parts.push(`-${this.formatRushCountdown(rushHoursInfo.countdownMinutes)}`);
+      }
+      return {
+        text: parts.join(" "),
+        bgColor: colors.contextCriticalBg,
+        fgColor: colors.contextCriticalFg,
+      };
+    }
+
+    if (rushHoursInfo.isWeekend) {
+      return {
+        text: `${this.symbols.rush_hours} Weekend`,
+        bgColor: colors.rushHoursBg,
+        fgColor: colors.rushHoursFg,
+      };
+    }
+
+    const parts = [`${this.symbols.rush_hours} Off-peak`];
+    if (showCountdown) {
+      parts.push(`+${this.formatRushCountdown(rushHoursInfo.countdownMinutes)}`);
+    }
+    return {
+      text: parts.join(" "),
+      bgColor: colors.rushHoursBg,
+      fgColor: colors.rushHoursFg,
+    };
+  }
+
+  private formatRushCountdown(minutes: number): string {
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    if (h > 0 && m > 0) return `${h}h ${m}m`;
+    if (h > 0) return `${h}h`;
+    return `${m}m`;
   }
 }
