@@ -12,7 +12,6 @@ import type {
 import type { TodayInfo } from "./today";
 import type { RushHoursInfo } from "./rushHours";
 
-import path from "node:path";
 import {
   formatModelName,
   abbreviateFishStyle,
@@ -207,7 +206,7 @@ export class SegmentRenderer {
     const style = config?.style ?? (config?.showBasename ? "basename" : "full");
 
     if (style === "basename") {
-      const basename = path.basename(currentDir) || "root";
+      const basename = currentDir.split(/[\\/]/).pop() || "root";
       return {
         text: basename,
         bgColor: colors.modeBg,
@@ -706,7 +705,7 @@ export class SegmentRenderer {
     if (projectDir && projectDir !== currentDir) {
       if (currentDir.startsWith(projectDir)) {
         const relativePath = currentDir.slice(projectDir.length + 1);
-        return relativePath || path.basename(projectDir) || "project";
+        return relativePath || projectDir.split(/[\\/]/).pop() || "project";
       }
     }
 
@@ -793,7 +792,7 @@ export class SegmentRenderer {
     colors: PowerlineColors,
     config: EnvSegmentConfig,
   ): SegmentData | null {
-    const value = process.env[config.variable];
+    const value = globalThis.process?.env?.[config.variable];
     if (!value) return null;
     const prefix = config.prefix ?? config.variable;
     const text = prefix

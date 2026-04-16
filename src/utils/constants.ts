@@ -35,6 +35,8 @@ export const SYMBOLS = {
   session_id: "⌗",
   weekly_cost: "◑",
   rush_hours: "⚡",
+  dir: "📁",
+  activity: "⚡",
 } as const;
 
 export const BOX_CHARS = {
@@ -171,4 +173,6 @@ export const TEXT_SYMBOLS = {
   session_id: "#",
   weekly_cost: "W",
   rush_hours: "!",
+  dir: "D",
+  activity: "A",
 } as const;

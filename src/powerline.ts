@@ -27,11 +27,11 @@ import type { TuiData } from "./tui";
 import {
   hexToAnsi,
   extractBgToFg,
-  getColorSupport,
   hexToBasicAnsi,
   hexTo256Ansi,
   hexColorDistance,
 } from "./utils/colors";
+import { getColorSupport } from "./utils/color-support";
 import { getTheme } from "./themes";
 import {
   UsageProvider,
@@ -51,7 +51,8 @@ import {
   BOX_CHARS,
   BOX_CHARS_TEXT,
 } from "./utils/constants";
-import { getTerminalWidth, visibleLength } from "./utils/terminal";
+import { visibleLength } from "./utils/terminal";
+import { getTerminalWidth, getRawTerminalWidth } from "./utils/terminal-width";
 import { renderTuiPanel } from "./tui";
 
 interface RenderedSegment {
@@ -358,6 +359,7 @@ export class PowerlineRenderer {
       colors.reset,
       terminalWidth,
       this.config,
+      { rawTerminalWidth: getRawTerminalWidth() },
     );
   }
 
